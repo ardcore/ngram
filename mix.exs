@@ -40,6 +40,9 @@ defmodule Ngram.Mixfile do
   defp package do
     [# These are the default files included in the package
      maintainers: ["Szymon Pilkowski"],
+    collaborators: [
+      {"Ivo Nascimento", "https://github.com/iannsp"}
+    ],
      licenses: ["MIT"],
      links: %{"GitHub" => "https://github.com/ardcore/ngram"}
     ]
