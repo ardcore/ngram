@@ -5,7 +5,7 @@ defmodule Ngram do
   """
 
   @ngram_size 2
-
+  @token_type :letter 
   @doc """
   tokenize a string into n-grams
 
@@ -15,13 +15,25 @@ defmodule Ngram do
 
       iex> Ngram.tokenize("abcdef", 3)
       ["abc", "bcd", "cde", "def"]
+
+      iex> Ngram.tokenize("free world", 2, :word)
+      ["free world"]
+
+      iex> Ngram.tokenize("free world", 2)
+      ["fr", "re", "ee", "e ", " w", "wo", "or", "rl", "ld"]
+
+
   """
-  def tokenize(str, n \\ @ngram_size)
-  def tokenize(str, n) when is_binary(str), do:
-    tokenize(String.codepoints(str), n)
-  def tokenize(chars, n) when n <= 0 or length(chars) <0, do: :nil
-  def tokenize(chars, n) do
-    Stream.chunk(chars, n, 1) |> Enum.map(&(to_string(&1)))
+  def tokenize(str, n \\ @ngram_size, token_type \\ @token_type)
+  def tokenize(str, n, token_type) when is_binary(str) do
+    case token_type do
+      :letter -> tokenize(String.codepoints(str), n)
+      :word   -> Enum.map(Enum.chunk( String.split(str, " ") ,n,1), fn(token) -> Enum.join(token, " ")  end)
+    end
+  end
+  def tokenize(chars, n, _) when n <= 0 or length(chars) <0, do: :nil
+  def tokenize(chars, n, _) do
+      Enum.chunk(chars, n, 1) |> Enum.map(&(to_string(&1)))
   end
 
   @doc """
@@ -38,6 +50,9 @@ defmodule Ngram do
       ["b", "c", "b"]
       iex> Ngram.intersect("abcb", "")
       []
+      iex> Ngram.intersect(["free","world"], ["free"])
+      ["free"]
+
   """
   def intersect(a, b) when is_binary(a) and is_binary(b) do
     intersect(String.codepoints(a), String.codepoints(b))

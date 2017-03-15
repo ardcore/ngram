@@ -7,9 +7,9 @@ defmodule Ngram.Mixfile do
      elixir: "~> 1.1",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     description: description,
-     package: package,
-     deps: deps]
+     description: description(),
+     package: package(),
+     deps: deps()]
   end
 
   # Configuration for the OTP application
@@ -40,8 +40,12 @@ defmodule Ngram.Mixfile do
   defp package do
     [# These are the default files included in the package
      maintainers: ["Szymon Pilkowski"],
+    collaborators: [
+      {"Ivo Nascimento", "https://github.com/iannsp"}
+    ],
      licenses: ["MIT"],
      links: %{"GitHub" => "https://github.com/ardcore/ngram"}
     ]
   end
-end
+
+  end
