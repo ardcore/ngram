@@ -5,7 +5,7 @@ defmodule Ngram do
   """
 
   @ngram_size 2
-  @token_type :letter 
+  @token_type :letter
   @doc """
   tokenize a string into n-grams
 
@@ -28,12 +28,12 @@ defmodule Ngram do
   def tokenize(str, n, token_type) when is_binary(str) do
     case token_type do
       :letter -> tokenize(String.codepoints(str), n)
-      :word   -> Enum.map(Enum.chunk( String.split(str, " ") ,n,1), fn(token) -> Enum.join(token, " ")  end)
+      :word   -> Enum.map(Enum.chunk_every( String.split(str, " ") ,n,1, :discard), fn(token) -> Enum.join(token, " ")  end)
     end
   end
   def tokenize(chars, n, _) when n <= 0 or length(chars) <0, do: :nil
   def tokenize(chars, n, _) do
-      Enum.chunk(chars, n, 1) |> Enum.map(&(to_string(&1)))
+      Enum.chunk_every(chars, n, 1, :discard) |> Enum.map(&(to_string(&1)))
   end
 
   @doc """
